@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: Dámaso temporizadores API
+  title: Damaso temporizadores API
   description: 'API de sensorización del proyecto Dámaso. Ingeniería de Servicios TIC, Universidad de Extremadura'
   contact:
     email: jleongon@alumnos.unex.es
