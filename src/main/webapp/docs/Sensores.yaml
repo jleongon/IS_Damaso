@@ -1,0 +1,212 @@
+openapi: 3.0.1
+info:
+  title: Dámaso sensorización API
+  description: 'API de sensorización del proyecto Dámaso. Ingeniería de Servicios TIC, Universidad de Extremadura'
+  contact:
+    email: jherreragl@alumnos.unex.es
+  version: 1.0.0
+servers:
+- url: https://localhost:8080/sensorapi
+tags:
+- name: Sensorización
+  description: Operaciones relacionadas con los sensores físicos
+- name: Usuario
+  description: Operaciones relacionadas con el estado del usuario
+paths:
+  /notifications:
+    post:
+      tags:
+      - Sensorización
+      summary: Notifica de un cambio en los sensores
+      description: Se notifica de un cambio concreto en un timestamp concreto
+      operationId: notifyChange
+      requestBody:
+        description: Cambio en el sensor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SensorNotification'
+        required: true
+      responses:
+        200:
+          description: Cambio añadido con éxito
+          content: {}
+        405:
+          description: Entrada inválida
+          content: {}
+        406:
+          description: Entrada ya existente
+          content: {}
+    get:
+      tags:
+      - Sensorización
+      summary: Obtiene el log de cambios de los sensores
+      description: El log se obtiene completo, salvo en caso de estar vacío
+      operationId: getNotificationLog
+      responses:
+        200:
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SensorNotification'
+        408:
+          description: Log vacío
+          content: {}
+  /notifications/{roomID}:
+    get:
+      tags: 
+      - Sensorización
+      summary: Devuelve el log de cambios de sensores de una habitación
+      description: Se devuelve el log con sus cambios completos, habitación incluida.
+      parameters: 
+      - name: roomID
+        in: path
+        required: true
+        description: Habitación de la que obtener el cambio
+        schema:
+          type: string
+      operationId: getNotification
+      responses:
+        200:
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SensorNotification'
+        408:
+          description: Log vacío
+          content: {}
+        404:
+          description: La habitación no existe
+          content: {}
+  /userStatuses:
+    get:
+      tags: 
+      - Usuario
+      summary: Devuelve el log de estados del usuario
+      description: Los estados se generan internamente y permiten entender la información más fácilmente.
+      operationId: getStatuses
+      responses:
+        200:
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+        408:
+          description: Log vacío
+          content: {}
+  /userStatuses/current:
+    get:
+      tags:
+      - Usuario
+      summary: Devuelve el estado actual del usuario
+      description: Facilita conocer el estado del usuario en el timestamp actual sin complicaciones.
+      operationId: getCurrStatus
+      responses:
+        200:
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        404:
+          description: La sensorización está desactivada
+          content: {}
+    put:
+      tags:
+      - Usuario
+      summary: Actualiza el estado actual del usuario
+      description: Permite actualizar el estado del usuario a nivel alto.
+      operationId: changeStatus
+      requestBody:
+        description: Nuevo estado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Status'
+      responses:
+        200:
+          description: Estado cambiado con éxito
+          content: {}
+        405:
+          description: Entrada inválida
+          content: {}
+  /userStatuses/{timestamp}:
+    get:
+      tags:
+      - Usuario
+      summary: Devuelve el estado del usuario en el timestamp especificado
+      description: Permite consultar estados pasados
+      operationId: getStatus
+      parameters:
+        - name: timestamp
+          in: path
+          required: true
+          description: Timestamp a consultar
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        404:
+          description: La sensorización estaba desactivada en ese momento
+          content: {}
+        405:
+          description: Timestamp futuro
+          content: {}
+components:
+  schemas:
+    SensorNotification:
+      description: Notificación de cambio en el estado de un sensor.
+      required: 
+      - notifType
+      - timestamp
+      - room
+      type: object
+      properties:
+        notifType:
+          type: boolean
+          description: Tipo de notificación. True si es de presencia, false en caso contrario
+          example: true
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp de la notificación
+        room:
+          type: string
+          description: Habitación sensorizada
+          example: Salón
+    Status:
+      description: Estado del usuario.
+      required:
+      - isSitting
+      - timestamp
+      - room
+      type: object
+      properties:
+        isSitting:
+          type: boolean
+          description: Describe si el usuario está o no sentado.
+          example: false
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp del estado.
+        room:
+          type: string
+          description: Habitación en la que se encuentra el usuario.
+          example: Cocina

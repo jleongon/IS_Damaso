@@ -1,0 +1,186 @@
+openapi: 3.0.1
+info:
+  title: Damaso temporizadores API
+  description: 'API de sensorización del proyecto Dámaso. Ingeniería de Servicios TIC, Universidad de Extremadura'
+  contact:
+    email: jleongon@alumnos.unex.es
+  version: 1.0.0
+servers:
+- url: https://localhost:8080/sensorapi
+tags:
+- name: Temporizadores
+  description: Operaciones relacionadas con los temporizadores
+paths:
+  /timers:
+    post:
+      tags:
+      - Temporizadores
+      summary: Añade un nuevo temporizador
+      description: Se añade un nuevo temporizador
+      operationId: addTimer
+      requestBody:
+        description: Nuevo temporizador
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Timer'
+        required: true
+      responses:
+        200:
+          description: Temporizador añadido con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  idTimer:
+                    type: integer
+                    format: int64
+                    description: Identificador único del temporizador
+        405:
+          description: Entrada inválida
+          content: {}
+        406:
+          description: Entrada ya existente
+          content: {}
+    get:
+      tags:
+      - Temporizadores
+      summary: Obtiene los temporizadores programados actualmente
+      description: Se obtiene una lista con todos los temporizadores, salvo que no haya ninguno programado
+      operationId: getTimers
+      responses:
+        200:
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Timer'
+        408:
+          description: No hay temporizadores programados actualmente
+          content: {}
+  /timers/{timerID}:
+    get:
+      tags: 
+      - Temporizadores
+      summary: Devuelve un temporizador específico.
+      description: Devuelve los datos de un temporizador específico.
+      parameters: 
+      - name: timerID
+        in: path
+        required: true 
+        description: ID único del temporizador a obtener
+        schema:
+          type: integer
+          format: int64
+      operationId: getTimer
+      responses:
+        200:
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timer'
+        405:
+          description: Entrada inválida
+          content: {}
+        404:
+          description: El temporizador no existe
+          content: {}
+    delete:
+      tags: 
+      - Temporizadores
+      summary: Borra un temporizador específico
+      description: Borra los datos de un temporizador específico.
+      parameters: 
+      - name: timerID
+        in: path
+        required: true 
+        description: ID único del temporizador a borrar.
+        schema:
+          type: integer
+          format: int64
+      operationId: deleteTimer
+      responses:
+        200:
+          description: Éxito
+          content: {}
+        405:
+          description: Entrada inválida
+          content: {}
+        404:
+          description: El temporizador no existe
+          content: {}
+    put:
+      tags: 
+      - Temporizadores
+      summary: Modifica un temporizador específico
+      description: Modifica los datos de un temporizador específico.
+      parameters: 
+      - name: timerID
+        in: path
+        required: true 
+        description: ID único del temporizador a modificar.
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Temporizador modificado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Timer'
+        required: true
+      operationId: modifyTimer
+      responses:
+        200:
+          description: Éxito
+          content: {}
+        405:
+          description: Entrada inválida
+          content: {}
+        404:
+          description: El temporizador no existe
+          content: {}
+components:
+  schemas:
+    Timer:
+      description: Temporizador para una notificación.
+      required: 
+      - idTimer
+      - timestamp
+      - notification
+      type: object
+      properties:
+        idTimer:
+          type: integer
+          format: int64
+          description: Identificador único para cada temporizador
+          example: 12397812
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp de la ejecución del temporizador
+        notification:
+          type: object
+          description: Notificación asociada al temporizador
+          properties:
+            notificationID:
+              description: Identificador de la notificación.
+              type: integer
+              format: int64
+              example: 12345
+            content:
+              type: string
+              description: Contiene el mensaje de la notificación.
+              example: "¡Hora de tomar el ibuprofeno!"
+            notificationType:
+              description: Identifica el tipo de notificación que se va a enviar
+              type: string
+              example: medicine
+              enum:
+                - medicine
+                - food
+                - inactivity
