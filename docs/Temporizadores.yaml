@@ -6,7 +6,7 @@ info:
     email: jleongon@alumnos.unex.es
   version: 1.0.0
 servers:
-- url: http://damaso-timers.herokuapp.com/sensorapi
+- url: http://damaso-timers.herokuapp.com/timersapi
 tags:
 - name: Temporizadores
   description: Operaciones relacionadas con los temporizadores
