@@ -31,7 +31,7 @@
     
     <servlet-mapping>
         <servlet-name>jersey</servlet-name>
-        <url-pattern>/sensorapi/*</url-pattern>
+        <url-pattern>/timersapi/*</url-pattern>
     </servlet-mapping>
     <filter>
         <filter-name>ApiOriginFilter</filter-name>
