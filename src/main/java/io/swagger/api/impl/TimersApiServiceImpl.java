@@ -21,14 +21,14 @@ import javax.ws.rs.core.SecurityContext;
 import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaJerseyServerCodegen", date = "2019-11-07T18:16:59.231Z[GMT]")public class TimersApiServiceImpl extends TimersApiService {
 	
-	Map<Integer, Timer> map = new HashMap<Integer, Timer>();
-	int id = 0;
+	Map<Long, Timer> map = new HashMap<Long, Timer>();
+	long id = 0;
 	
 	
 	@Override
     public Response addTimer(Timer body, SecurityContext securityContext) throws NotFoundException {
         // do some magic!
-		body.setIdTimer((long) id);
+		body.setIdTimer(id);
 		map.put(id, body);		
         return Response.ok().entity(Integer.toString(id++)).build();
     }
