@@ -59,7 +59,7 @@ import javax.validation.constraints.*;
         // do some magic!
     	if(!map.containsKey(timerID))
     		return Response.status(404).build();
-    	map.put(timerID.intValue(), body);
+    	map.put(timerID.longValue(), body);
         return Response.ok().entity("").build();
     }
 }
