@@ -30,7 +30,7 @@ import javax.validation.constraints.*;
         // do some magic!
 		body.setIdTimer(id);
 		map.put(id, body);		
-        return Response.ok().entity(Integer.toString(id++)).build();
+        return Response.ok().entity(Long.toString(id++)).build();
     }
     @Override
     public Response deleteTimer(Long timerID, SecurityContext securityContext) throws NotFoundException {
