@@ -13,17 +13,26 @@ import java.util.List;
 import io.swagger.api.NotFoundException;
 
 import java.io.InputStream;
+import utils.TimerMetric;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
+import java.io.DataOutputStream;
+import java.net.Socket;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+
 import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaJerseyServerCodegen", date = "2019-11-07T18:16:59.231Z[GMT]")public class TimersApiServiceImpl extends TimersApiService {
 	
 	Map<Long, Timer> map = new HashMap<Long, Timer>();
 	long id = 0;
 	
+	public TimersApiServiceImpl () {	
+		TimerMetric timer = new TimerMetric();
+		timer.run();
+	}
 	
 	@Override
     public Response addTimer(Timer body, SecurityContext securityContext) throws NotFoundException {
