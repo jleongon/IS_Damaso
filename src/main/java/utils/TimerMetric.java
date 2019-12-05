@@ -22,7 +22,7 @@ public class TimerMetric extends TimerTask {
       try {
            
        dos = new DataOutputStream(conn.getOutputStream());
-       dos.writeBytes("dc6993e9-ce93-49f7-9517-eddf11cc1039.test.testing 1.2\n");
+       dos.writeBytes("dc6993e9-ce93-49f7-9517-eddf11cc1039.timers.uptime 1\n");
        
       } catch (IOException e) {
        // TODO Auto-generated catch block
