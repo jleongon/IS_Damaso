@@ -14,15 +14,16 @@ public class TimerMetric extends TimerTask {
   try {
    timerTask = new TimerTask()
     {
-      Socket conn = new Socket("38b29376.carbon.hostedgraphite.com", 2003);
+      Socket conn = new Socket("b246e143.carbon.hostedgraphite.com", 2003);
 
         public void run() 
         {
        DataOutputStream dos;
       try {
+           
        dos = new DataOutputStream(conn.getOutputStream());
-       dos.writeBytes("e5fcc8bb-12f7-4754-8943-ef6017a43efc.timers.uptime 1 \n");
-           System.out.println("Métrica UPTIME: " + 1);
+       dos.writeBytes("dc6993e9-ce93-49f7-9517-eddf11cc1039.test.testing 1.2\n");
+       
       } catch (IOException e) {
        // TODO Auto-generated catch block
        e.printStackTrace();
